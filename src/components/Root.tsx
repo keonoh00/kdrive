@@ -1,11 +1,14 @@
+import { Box } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 
 const RootComponent = () => {
   return (
-    <div>
-      <h1>Root Component</h1>
+    // Box is a Chakra UI the most basic component
+    <Box>
+      {/* Header */}
       <Outlet />
-    </div>
+      {/* Footer */}
+    </Box>
   );
 };
 
