@@ -1,11 +1,11 @@
 import { Box, Grid } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
-import { useUserProfile } from "../api/useUserProfile";
+import { useUser } from "../api/useUser";
 import Folder, { FolderSkeleton } from "./Folder";
 import RootHeader from "./RootHeader";
 
 const Root = () => {
-  const { data } = useUserProfile();
+  const { data } = useUser();
 
   console.log(data);
 
