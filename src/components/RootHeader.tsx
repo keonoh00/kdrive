@@ -8,13 +8,15 @@ import {
   useColorMode,
   LightMode,
   useColorModeValue,
+  Avatar,
 } from "@chakra-ui/react";
 import { FaGoogleDrive, FaMoon, FaSun } from "react-icons/fa";
+import { useUser } from "../api/useUser";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
 
 const RootHeader = () => {
-  const isLoggedIn = false;
+  const { isLoggedIn, isLoadingUser } = useUser();
   const { toggleColorMode } = useColorMode();
   const logoColor = useColorModeValue("red.400", "red.300");
   const ThemeToggleIcon = useColorModeValue(FaMoon, FaSun);
@@ -51,24 +53,39 @@ const RootHeader = () => {
           aria-label="Toggle dark mode"
           icon={<ThemeToggleIcon />}
         />
-        {isLoggedIn ? (
-          <Button bg={"red.400"} size={"sm"}>
-            Log Out
-          </Button>
-        ) : (
-          <>
-            <Button onClick={onOpenLoginModal} size={"sm"}>
-              Log In
-            </Button>
-            <LoginModal isOpen={isOpenLoginModal} onClose={onCloseLoginModal} />
-          </>
-        )}
-        <LightMode>
-          <Button onClick={onOpenSignupModal} size={"sm"} colorScheme="red">
-            Sign Up
-          </Button>
-        </LightMode>
-        <SignupModal isOpen={isOpenSignupModal} onClose={onCloseSignupModal} />
+        {!isLoadingUser ? (
+          !isLoggedIn ? (
+            <>
+              <Button onClick={onOpenLoginModal} size={"sm"}>
+                Log In
+              </Button>
+              <LightMode>
+                <Button
+                  onClick={onOpenSignupModal}
+                  size={"sm"}
+                  colorScheme="red"
+                >
+                  Sign Up
+                </Button>
+              </LightMode>
+              <LoginModal
+                isOpen={isOpenLoginModal}
+                onClose={onCloseLoginModal}
+              />
+              <SignupModal
+                isOpen={isOpenSignupModal}
+                onClose={onCloseSignupModal}
+              />
+            </>
+          ) : (
+            <>
+              <Avatar />
+              <Button bg={"red.400"} size={"sm"}>
+                Log Out
+              </Button>
+            </>
+          )
+        ) : null}
       </HStack>
     </HStack>
   );

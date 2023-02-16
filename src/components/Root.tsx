@@ -1,14 +1,9 @@
 import { Box, Grid } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
-import { useUser } from "../api/useUser";
 import Folder, { FolderSkeleton } from "./Folder";
 import RootHeader from "./RootHeader";
 
 const Root = () => {
-  const { data } = useUser();
-
-  console.log(data);
-
   return (
     // Box is a Chakra UI the most basic component
     <Box>
