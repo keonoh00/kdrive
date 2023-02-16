@@ -6,7 +6,9 @@ import {
   SkeletonText,
   VStack,
 } from "@chakra-ui/react";
+import { FC } from "react";
 import { FaFolder } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const FOLDER_HEIGHT = 120;
 
@@ -19,16 +21,28 @@ export const FolderSkeleton = () => {
   );
 };
 
-const Folder = () => {
+interface IFolderProps {
+  name: string;
+}
+
+const Folder: FC<IFolderProps> = ({ name }) => {
   return (
-    <VStack borderWidth={1} rounded={"xl"} mb={2} py={3} height={FOLDER_HEIGHT}>
-      <FaFolder size={64} />
-      <Grid templateColumns="repeat(1, 3fr)">
-        <Heading noOfLines={1} fontSize={"sm"} textAlign={"center"}>
-          {"Folder name"}
-        </Heading>
-      </Grid>
-    </VStack>
+    <Link to={`/${name}`}>
+      <VStack
+        borderWidth={1}
+        rounded={"xl"}
+        mb={2}
+        py={3}
+        height={FOLDER_HEIGHT}
+      >
+        <FaFolder size={64} />
+        <Grid templateColumns="repeat(1, 3fr)">
+          <Heading noOfLines={1} fontSize={"sm"} textAlign={"center"}>
+            {name}
+          </Heading>
+        </Grid>
+      </VStack>
+    </Link>
   );
 };
 

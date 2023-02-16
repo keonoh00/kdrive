@@ -11,6 +11,7 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import { FaGoogleDrive, FaMoon, FaSun } from "react-icons/fa";
+
 import { useUser } from "../api/useUser";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
