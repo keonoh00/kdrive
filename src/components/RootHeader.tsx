@@ -5,13 +5,20 @@ import {
   IconButton,
   Text,
   Box,
+  useColorMode,
+  LightMode,
+  useColorModeValue,
 } from "@chakra-ui/react";
-import { FaGoogleDrive, FaMoon } from "react-icons/fa";
+import { FaGoogleDrive, FaMoon, FaSun } from "react-icons/fa";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
 
 const RootHeader = () => {
   const isLoggedIn = false;
+  const { toggleColorMode } = useColorMode();
+  const logoColor = useColorModeValue("red.400", "red.300");
+  const ThemeToggleIcon = useColorModeValue(FaMoon, FaSun);
+
   const {
     isOpen: isOpenLoginModal,
     onClose: onCloseLoginModal,
@@ -31,7 +38,7 @@ const RootHeader = () => {
       justifyContent={"space-between"}
     >
       <HStack>
-        <Box color={"red.700"}>
+        <Box color={logoColor}>
           <FaGoogleDrive size={"28"} />
         </Box>
         <Text>Google Drive</Text>
@@ -39,9 +46,10 @@ const RootHeader = () => {
 
       <HStack spacing={1}>
         <IconButton
+          onClick={toggleColorMode}
           variant={"ghost"}
           aria-label="Toggle dark mode"
-          icon={<FaMoon />}
+          icon={<ThemeToggleIcon />}
         />
         {isLoggedIn ? (
           <Button bg={"red.400"} size={"sm"}>
@@ -55,9 +63,11 @@ const RootHeader = () => {
             <LoginModal isOpen={isOpenLoginModal} onClose={onCloseLoginModal} />
           </>
         )}
-        <Button onClick={onOpenSignupModal} size={"sm"}>
-          Sign Up
-        </Button>
+        <LightMode>
+          <Button onClick={onOpenSignupModal} size={"sm"} colorScheme="red">
+            Sign Up
+          </Button>
+        </LightMode>
         <SignupModal isOpen={isOpenSignupModal} onClose={onCloseSignupModal} />
       </HStack>
     </HStack>
