@@ -32,7 +32,7 @@ const RootHeader = () => {
 
   return (
     <HStack
-      px={8}
+      px={20}
       py={5}
       borderBottomWidth={1}
       justifyContent={"space-between"}
@@ -41,7 +41,7 @@ const RootHeader = () => {
         <Box color={logoColor}>
           <FaGoogleDrive size={"28"} />
         </Box>
-        <Text>Google Drive</Text>
+        <Text>Drive</Text>
       </HStack>
 
       <HStack spacing={1}>
