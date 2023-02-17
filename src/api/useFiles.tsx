@@ -1,16 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
+import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
 import { axisoInstance } from ".";
 import { QUERY_KEYS } from "../constants/api";
 
-const getUser = async () => {
-  const response = await axisoInstance.get("users/me");
+const getDirectoryContents = async ({ queryKey }: QueryFunctionContext) => {
+  const [_, path] = queryKey;
+
+  const response = await axisoInstance.get(`files/${path}`);
   return response.data;
 };
 
 export const useUser = () => {
   const { data, isError, isLoading } = useQuery(
     [QUERY_KEYS.USER_PROFILE],
-    getUser,
+    getDirectoryContents,
     { retry: false }
   );
 

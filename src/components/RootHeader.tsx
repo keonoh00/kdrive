@@ -9,19 +9,31 @@ import {
   LightMode,
   useColorModeValue,
   Avatar,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  useToast,
 } from "@chakra-ui/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { FaGoogleDrive, FaMoon, FaSun } from "react-icons/fa";
-
+import { Link } from "react-router-dom";
+import authHandler from "../api/auth/authHandler";
 import { useUser } from "../api/useUser";
+import { QUERY_KEYS } from "../constants/api";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
 
 const RootHeader = () => {
-  const { isLoggedIn, isLoadingUser } = useUser();
+  // Queries
+  const queryClient = useQueryClient();
+  const { user, isLoggedIn, isLoadingUser } = useUser();
+
+  // Chakra UI hooks
   const { toggleColorMode } = useColorMode();
   const logoColor = useColorModeValue("red.400", "red.300");
   const ThemeToggleIcon = useColorModeValue(FaMoon, FaSun);
-
+  const toast = useToast();
   const {
     isOpen: isOpenLoginModal,
     onClose: onCloseLoginModal,
@@ -33,6 +45,24 @@ const RootHeader = () => {
     onOpen: onOpenSignupModal,
   } = useDisclosure();
 
+  const onPressLogout = async () => {
+    const toastId = toast({
+      title: "Logging out",
+      status: "loading",
+      description: "We are logging you out...",
+      position: "bottom-right",
+    });
+
+    await authHandler.logOut();
+    queryClient.refetchQueries([QUERY_KEYS.USER_PROFILE]);
+
+    toast.update(toastId, {
+      title: "Logged out",
+      status: "success",
+      description: "You have been logged out successfully",
+    });
+  };
+
   return (
     <HStack
       px={20}
@@ -40,12 +70,14 @@ const RootHeader = () => {
       borderBottomWidth={1}
       justifyContent={"space-between"}
     >
-      <HStack>
-        <Box color={logoColor}>
-          <FaGoogleDrive size={"28"} />
-        </Box>
-        <Text>Drive</Text>
-      </HStack>
+      <Link to="/">
+        <HStack>
+          <Box color={logoColor}>
+            <FaGoogleDrive size={"28"} />
+          </Box>
+          <Text>Drive</Text>
+        </HStack>
+      </Link>
 
       <HStack spacing={1}>
         <IconButton
@@ -76,15 +108,25 @@ const RootHeader = () => {
               <SignupModal
                 isOpen={isOpenSignupModal}
                 onClose={onCloseSignupModal}
+                showLoginModal={onOpenLoginModal}
               />
             </>
           ) : (
-            <>
-              <Avatar />
-              <Button bg={"red.400"} size={"sm"}>
-                Log Out
-              </Button>
-            </>
+            <Menu>
+              <MenuButton>
+                <Avatar name={user.name} src={user.avatar} />
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  bg={"red.400"}
+                  textAlign={"center"}
+                  justifyContent={"center"}
+                  onClick={onPressLogout}
+                >
+                  Log Out
+                </MenuItem>
+              </MenuList>
+            </Menu>
           )
         ) : null}
       </HStack>

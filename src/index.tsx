@@ -6,7 +6,7 @@ import router from "./router";
 import theme from "./theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const client = new QueryClient();
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -14,7 +14,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={client}>
+    <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={theme}>
         <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <RouterProvider router={router} />

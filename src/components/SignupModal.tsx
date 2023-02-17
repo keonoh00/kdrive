@@ -1,4 +1,6 @@
+import { useForm } from "react-hook-form";
 import {
+  Box,
   Button,
   Input,
   InputGroup,
@@ -7,58 +9,170 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
-import { FC } from "react";
-import { FaEnvelope, FaLock, FaTag, FaUser } from "react-icons/fa";
+import { FaEnvelope, FaLock, FaUser, FaUserCircle } from "react-icons/fa";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import authHandler from "../api/auth/authHandler";
+import {
+  ISignupFailResponse,
+  ISignUpRequest,
+  ISignUpSuccessResponse,
+} from "../api/auth/type";
+import { QUERY_KEYS } from "../constants/api";
 
 interface SignupModalProps {
   isOpen: boolean;
   onClose: () => void;
+  showLoginModal: () => void;
 }
 
-const SignupModal: FC<SignupModalProps> = ({ isOpen, onClose }) => {
+export default function SignupModal({
+  isOpen,
+  onClose,
+  showLoginModal,
+}: SignupModalProps) {
+  const toast = useToast();
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation<
+    ISignUpSuccessResponse,
+    ISignupFailResponse,
+    ISignUpRequest
+  >(authHandler.signUp, {
+    onSuccess: () => {
+      toast({
+        title: "Welcome!",
+        status: "success",
+        description: "You have successfully created your account",
+      });
+      queryClient.refetchQueries([QUERY_KEYS.USER_PROFILE]);
+      onClose();
+      showLoginModal();
+    },
+    onError: () => {
+      toast({
+        title: "Something went wrong",
+        status: "error",
+      });
+    },
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ISignUpRequest>();
+
+  const onSubmit = async ({
+    username,
+    password,
+    email,
+    name,
+  }: ISignUpRequest) => {
+    mutation.mutate({ username, password, email, name });
+  };
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal onClose={onClose} isOpen={isOpen}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>
-          Sign up
-          <ModalCloseButton />
-        </ModalHeader>
-
-        <ModalBody>
+        <ModalHeader>Log in</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody as="form" onSubmit={handleSubmit(onSubmit)}>
           <VStack>
+            {/* Name */}
             <InputGroup>
-              <InputLeftElement children={<FaTag />} />
-              <Input variant={"filled"} placeholder="Name" />
+              <InputLeftElement
+                children={
+                  <Box color="gray.500">
+                    <FaUser />
+                  </Box>
+                }
+              />
+              <Input
+                isInvalid={Boolean(errors.name?.message)}
+                {...register("name", {
+                  required: "Please write a name",
+                })}
+                type="name"
+                variant={"filled"}
+                placeholder="Name"
+              />
             </InputGroup>
-            <InputGroup>
-              <InputLeftElement children={<FaUser />} />
-              <Input variant={"filled"} placeholder="Username" />
+
+            {/* username */}
+            <InputGroup size={"md"}>
+              <InputLeftElement
+                children={
+                  <Box color="gray.500">
+                    <FaUserCircle />
+                  </Box>
+                }
+              />
+              <Input
+                isInvalid={Boolean(errors.username?.message)}
+                {...register("username", {
+                  required: "Please write a username",
+                })}
+                variant={"filled"}
+                placeholder="Username"
+              />
             </InputGroup>
+
+            {/* Password */}
             <InputGroup>
-              <InputLeftElement children={<FaEnvelope />} />
-              <Input variant={"filled"} placeholder="Email" />
+              <InputLeftElement
+                children={
+                  <Box color="gray.500">
+                    <FaLock />
+                  </Box>
+                }
+              />
+              <Input
+                isInvalid={Boolean(errors.password?.message)}
+                {...register("password", {
+                  required: "Please write a password",
+                })}
+                type="password"
+                variant={"filled"}
+                placeholder="Password"
+              />
             </InputGroup>
+
+            {/* Email */}
             <InputGroup>
-              <InputLeftElement children={<FaLock />} />
-              <Input variant={"filled"} placeholder="Password" />
+              <InputLeftElement
+                children={
+                  <Box color="gray.500">
+                    <FaEnvelope />
+                  </Box>
+                }
+              />
+              <Input
+                isInvalid={Boolean(errors.email?.message)}
+                {...register("email", {
+                  required: "Please write a email",
+                })}
+                type="email"
+                variant={"filled"}
+                placeholder="Email"
+              />
             </InputGroup>
           </VStack>
-        </ModalBody>
-
-        <ModalFooter>
-          <Button w={"full"} colorScheme={"messenger"}>
-            Create account
+          <Button
+            isLoading={mutation.isLoading}
+            type="submit"
+            mt={4}
+            colorScheme={"messenger"}
+            w="100%"
+          >
+            Log in
           </Button>
-        </ModalFooter>
+        </ModalBody>
       </ModalContent>
     </Modal>
   );
-};
-
-export default SignupModal;
+}

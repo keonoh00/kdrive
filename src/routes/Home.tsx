@@ -1,6 +1,10 @@
 import { Grid } from "@chakra-ui/react";
 import Folder, { FolderSkeleton } from "../components/Folder";
 
+const DUMMY_ARRAY = [
+  23, 34, 345, 4325, 234, 52, 345, 23, 452, 345, 234, 5, 2345, 23, 452, 345,
+];
+
 const Home = () => {
   return (
     <Grid
@@ -12,14 +16,9 @@ const Home = () => {
       flexWrap="wrap"
     >
       <FolderSkeleton />
-      <Folder name="1" />
-      <Folder name="12" />
-      <Folder name="14" />
-      <Folder name="15" />
-      <Folder name="16" />
-      <Folder name="17" />
-      <Folder name="1dfasdf sdfasd.fsa" />
-      <Folder name="1 sdfasdfds   sdfasdfjisadjfds *" />
+      {DUMMY_ARRAY.map((value) => (
+        <Folder name={value + ""} to={`/${value}`} />
+      ))}
     </Grid>
   );
 };

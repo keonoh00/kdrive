@@ -22,12 +22,13 @@ export const FolderSkeleton = () => {
 };
 
 interface IFolderProps {
+  to: string;
   name: string;
 }
 
-const Folder: FC<IFolderProps> = ({ name }) => {
+const Folder: FC<IFolderProps> = ({ name, to }) => {
   return (
-    <Link to={`/${name}`}>
+    <Link to={to}>
       <VStack
         borderWidth={1}
         rounded={"xl"}
