@@ -1,0 +1,12 @@
+{
+  "extends": ["tslint:latest", "tslint-config-prettier", "tslint-etc"],
+  "rules": {
+    "object-literal-sort-keys": false,
+    "only-arrow-functions": false,
+    "member-access": false,
+    "max-classes-per-file": false,
+    "no-implicit-dependencies": [true, "dev"],
+    "no-unused-declaration": true,
+    "ordered-imports": true
+  }
+}

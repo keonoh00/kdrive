@@ -1,4 +1,3 @@
-import { useForm } from "react-hook-form";
 import {
   Box,
   Button,
@@ -14,8 +13,9 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { FaEnvelope, FaLock, FaUser, FaUserCircle } from "react-icons/fa";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { FaEnvelope, FaLock, FaUser, FaUserCircle } from "react-icons/fa";
 import authHandler from "../api/auth/authHandler";
 import {
   ISignupFailResponse,
