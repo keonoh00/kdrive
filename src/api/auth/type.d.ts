@@ -5,9 +5,15 @@ export interface ISignUpRequest {
   email: string;
 }
 
-export interface ISignUpSuccessResponse {}
-
-export interface ISignupFailResponse {}
+export interface ISignUpSuccessResponse {
+  avatar: string;
+  date_joined: string;
+  email: string;
+  id: number;
+  last_login: null;
+  name: string;
+  username: string;
+}
 
 export interface ILogInRequest {
   username: string;

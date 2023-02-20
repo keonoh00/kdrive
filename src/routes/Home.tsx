@@ -1,11 +1,24 @@
 import { Grid } from "@chakra-ui/react";
+import React from "react";
+import { useFiles } from "../api/useFiles";
 import Folder, { FolderSkeleton } from "../components/Folder";
 
-const DUMMY_ARRAY = [
-  23, 34, 345, 4325, 234, 52, 345, 23, 452, 345, 234, 5, 2345, 23, 452, 345,
-];
+const FolderSkeletonList = () => {
+  const dummyArray = new Array(20).fill("");
+  return (
+    <>
+      {dummyArray.map((value, index) => (
+        <FolderSkeleton key={index} />
+      ))}
+    </>
+  );
+};
 
 const Home = () => {
+  const { data, isLoading } = useFiles({ directoryPath: "/" });
+
+  const folders = data?.folders || [];
+
   return (
     <Grid
       templateColumns="repeat(5, 3fr)"
@@ -15,10 +28,13 @@ const Home = () => {
       py={8}
       flexWrap="wrap"
     >
-      <FolderSkeleton />
-      {DUMMY_ARRAY.map((value) => (
-        <Folder name={value + ""} to={`/${value}`} />
-      ))}
+      {isLoading ? (
+        <FolderSkeletonList />
+      ) : (
+        folders.map((value, index) => (
+          <Folder key={index} name={value + ""} to={`/${value}`} />
+        ))
+      )}
     </Grid>
   );
 };

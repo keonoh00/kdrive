@@ -1,6 +1,6 @@
-import Cookie from "js-cookie";
-import { axisoInstance } from "..";
-import { ILogInRequest, ISignUpRequest } from "./type";
+import Cookie from 'js-cookie';
+import { axisoInstance } from '..';
+import { ILogInRequest, ISignUpRequest } from './type';
 
 class AuthHandler {
   private static instance: AuthHandler;
@@ -14,53 +14,41 @@ class AuthHandler {
   }
 
   signUp = async ({ username, password, email, name }: ISignUpRequest) => {
-    try {
-      const response = await axisoInstance.post(
-        "users/create-account",
-        { username, password, email, name },
-        {
-          headers: {
-            "X-CSRFToken": Cookie.get("csrftoken") || "",
-          },
-        }
-      );
+    const response = await axisoInstance.post(
+      'users/create-account',
+      { username, password, email, name },
+      {
+        headers: {
+          'X-CSRFToken': Cookie.get('csrftoken') || '',
+        },
+      },
+    );
 
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    return response.data;
   };
 
   logIn = async ({ username, password }: ILogInRequest) => {
-    try {
-      const response = await axisoInstance.post(
-        "users/login",
-        { username, password },
-        {
-          headers: {
-            "X-CSRFToken": Cookie.get("csrftoken") || "",
-          },
-        }
-      );
+    const response = await axisoInstance.post(
+      'users/login',
+      { username, password },
+      {
+        headers: {
+          'X-CSRFToken': Cookie.get('csrftoken') || '',
+        },
+      },
+    );
 
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    return response.data;
   };
 
   logOut = async () => {
-    try {
-      const response = await axisoInstance.post("users/logout", null, {
-        headers: {
-          "X-CSRFToken": Cookie.get("csrftoken") || "",
-        },
-      });
+    const response = await axisoInstance.post('users/logout', null, {
+      headers: {
+        'X-CSRFToken': Cookie.get('csrftoken') || '',
+      },
+    });
 
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    return response.data;
   };
 }
 
