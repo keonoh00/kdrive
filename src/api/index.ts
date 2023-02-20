@@ -22,7 +22,11 @@ export const deleteFile = async ({ id }: { id: number }) => {
   if (!id) {
     throw new Error("id is required");
   }
-  const response = await axisoInstance.delete(`files/${id}`);
+  const response = await axisoInstance.delete(`files/${id}`, {
+    headers: {
+      "X-CSRFToken": Cookies.get("csrftoken") || "",
+    },
+  });
 
   return response.data;
 };
