@@ -12,11 +12,19 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { FaImage } from "react-icons/fa";
 import { createImage, getUploadURL, uploadImage } from "../api";
-import { IUploadImageRequest, IUploadImageResponse } from "../api/types";
+import {
+  ICreateImageRequest,
+  ICreateImageResponse,
+  IGenerateUploadURLRequest,
+  IGenerateUploadURLResponse,
+  IUploadImageRequest,
+  IUploadImageResponse,
+} from "../api/types";
 import CenteredModal from "./CenteredModal";
 
 interface IUploadForm {
@@ -38,7 +46,11 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
   const toast = useToast();
   const toastId = React.useRef<ToastId>();
 
-  const createImageDBMutation = useMutation(createImage, {
+  const createImageDBMutation = useMutation<
+    ICreateImageResponse,
+    AxiosError,
+    ICreateImageRequest
+  >(createImage, {
     onMutate: () => {
       const toastConfig = {
         title: "Running image classification in server",
@@ -55,7 +67,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
       const toastConfig = {
         title: "Image classification failed",
         status: "error" as AlertStatus,
-        description: JSON.stringify(error) || "",
+        description: error?.message || JSON.stringify(error),
       };
       if (toastId.current) {
         toast.update(toastId.current, toastConfig);
@@ -79,7 +91,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
 
   const uplaodImageMutation = useMutation<
     IUploadImageResponse,
-    { error: unknown },
+    AxiosError,
     IUploadImageRequest
   >(uploadImage, {
     onMutate: () => {
@@ -98,7 +110,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
       const toastConfig = {
         title: "Upload failed",
         status: "error" as AlertStatus,
-        description: JSON.stringify(error) || "",
+        description: error?.message || JSON.stringify(error),
       };
       if (toastId.current) {
         toast.update(toastId.current, toastConfig);
@@ -109,12 +121,16 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
     onSuccess: (data) => {
       createImageDBMutation.mutate({
         name: watch("file")[0].name,
-        imageURL: data.uploadURL,
+        imageURL: `https://upload.imagedelivery.net/dsQgSfWIsnrqGQ0-Ts_CRw/${data.id}/public`,
       });
     },
   });
 
-  const urlGenerationMutation = useMutation(getUploadURL, {
+  const urlGenerationMutation = useMutation<
+    IGenerateUploadURLResponse,
+    AxiosError,
+    IGenerateUploadURLRequest
+  >(getUploadURL, {
     onMutate: () => {
       toastId.current = toast({
         title: "Generating upload URL",
@@ -126,7 +142,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
       const toastConfig = {
         title: "URL generation failed",
         status: "error" as AlertStatus,
-        description: JSON.stringify(error) || "",
+        description: error?.message || JSON.stringify(error),
       };
       if (toastId.current) {
         toast.update(toastId.current, toastConfig);
@@ -143,7 +159,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
   });
 
   const onUpload = () => {
-    urlGenerationMutation.mutate();
+    urlGenerationMutation.mutate({});
   };
 
   return (

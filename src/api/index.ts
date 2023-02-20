@@ -51,7 +51,7 @@ export const uploadImage = async ({ file, uploadURL }: IUploadImageRequest) => {
 
 export const createImage = async ({ name, imageURL }: ICreateImageRequest) => {
   const response = await axisoInstance.post(
-    `files/create-image`,
+    `files/upload`,
     { name, image_url: imageURL },
     {
       headers: {
