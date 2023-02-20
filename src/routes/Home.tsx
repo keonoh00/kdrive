@@ -1,13 +1,17 @@
 import { Grid } from "@chakra-ui/react";
-import React from "react";
-import { useFiles } from "../api/useFiles";
+import React, { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useDirectoryItems } from "../api/useDirectoryItems";
+import { useUser } from "../api/useUser";
+import File from "../components/File";
 import Folder, { FolderSkeleton } from "../components/Folder";
+import NoUser from "../components/NoUser";
 
 const FolderSkeletonList = () => {
   const dummyArray = new Array(20).fill("");
   return (
     <>
-      {dummyArray.map((value, index) => (
+      {dummyArray.map((_, index) => (
         <FolderSkeleton key={index} />
       ))}
     </>
@@ -15,27 +19,49 @@ const FolderSkeletonList = () => {
 };
 
 const Home = () => {
-  const { data, isLoading } = useFiles({ directoryPath: "/" });
+  const [isLoadingDummy, setIsLoadingDummy] = React.useState(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [searchParams, _] = useSearchParams("/");
+
+  const { data, isLoading: isLoadingDirectoryItems } = useDirectoryItems({
+    directoryPath: searchParams.get("path") || "/",
+  });
+  const { user, isLoadingUser } = useUser();
 
   const folders = data?.folders || [];
+  const files = data?.files || [];
 
-  return (
+  const isLoading = isLoadingUser || isLoadingDirectoryItems || isLoadingDummy;
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoadingDummy(false);
+    }, 1000);
+  }, []);
+
+  return user ? (
     <Grid
-      templateColumns="repeat(5, 3fr)"
+      templateColumns="repeat(8, 3fr)"
       columnGap={4}
       rowGap={6}
       px={20}
       py={8}
-      flexWrap="wrap"
     >
       {isLoading ? (
         <FolderSkeletonList />
       ) : (
-        folders.map((value, index) => (
-          <Folder key={index} name={value + ""} to={`/${value}`} />
-        ))
+        <>
+          {folders.map((value, index) => (
+            <Folder key={index} item={value} />
+          ))}
+          {files.map((value, index) => (
+            <File key={index} item={value} />
+          ))}
+        </>
       )}
     </Grid>
+  ) : (
+    <NoUser />
   );
 };
 

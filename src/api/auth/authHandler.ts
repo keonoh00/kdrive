@@ -1,6 +1,6 @@
-import Cookie from 'js-cookie';
-import { axisoInstance } from '..';
-import { ILogInRequest, ISignUpRequest } from './type';
+import Cookie from "js-cookie";
+import { axisoInstance } from "..";
+import { ILogInRequest, ISignUpRequest } from "./type";
 
 class AuthHandler {
   private static instance: AuthHandler;
@@ -14,41 +14,54 @@ class AuthHandler {
   }
 
   signUp = async ({ username, password, email, name }: ISignUpRequest) => {
-    const response = await axisoInstance.post(
-      'users/create-account',
-      { username, password, email, name },
-      {
-        headers: {
-          'X-CSRFToken': Cookie.get('csrftoken') || '',
-        },
-      },
-    );
-
-    return response.data;
+    console.log("signUp", username, password, email, name);
+    try {
+      const response = await axisoInstance.post(
+        "users/create-account",
+        { username, password, email, name },
+        {
+          headers: {
+            "X-CSRFToken": Cookie.get("csrftoken") || "",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   };
 
   logIn = async ({ username, password }: ILogInRequest) => {
-    const response = await axisoInstance.post(
-      'users/login',
-      { username, password },
-      {
-        headers: {
-          'X-CSRFToken': Cookie.get('csrftoken') || '',
-        },
-      },
-    );
+    console.log("logIn", username, password);
+    try {
+      const response = await axisoInstance.post(
+        "users/login",
+        { username, password },
+        {
+          headers: {
+            "X-CSRFToken": Cookie.get("csrftoken") || "",
+          },
+        }
+      );
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   };
 
   logOut = async () => {
-    const response = await axisoInstance.post('users/logout', null, {
-      headers: {
-        'X-CSRFToken': Cookie.get('csrftoken') || '',
-      },
-    });
+    try {
+      const response = await axisoInstance.post("users/logout", null, {
+        headers: {
+          "X-CSRFToken": Cookie.get("csrftoken") || "",
+        },
+      });
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   };
 }
 

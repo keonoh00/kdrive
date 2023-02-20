@@ -23,7 +23,3 @@ export interface ILogInRequest {
 export interface ILogInSuccessResponse {
   ok: string;
 }
-
-export interface ILogInFailResponse {
-  error: string;
-}

@@ -6,7 +6,7 @@ import { IUser } from "./useUser";
 
 const getDirectoryContents = async ({
   queryKey,
-}: QueryFunctionContext): Promise<UseFilesResponse> => {
+}: QueryFunctionContext): Promise<UseDirectoryItemsResponse> => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, path] = queryKey;
 
@@ -23,26 +23,28 @@ const getDirectoryContents = async ({
   return response.data;
 };
 
-interface UseFilesRequest {
+interface UseDirectoryItemsRequest {
   directoryPath: string;
 }
 
-interface IFile {
+export interface IFile {
   created_at: string; // JS Date as string
   created_by: IUser;
   id: number;
   name: string;
   path: string;
   updated_at: string; // JS Date as string
-  url: string | null;
+  image_url: string | null;
 }
 
-interface UseFilesResponse {
+interface UseDirectoryItemsResponse {
   folders: IFile[];
-  images: IFile[];
+  files: IFile[];
 }
 
-export const useFiles = ({ directoryPath }: UseFilesRequest) => {
+export const useDirectoryItems = ({
+  directoryPath,
+}: UseDirectoryItemsRequest) => {
   return useQuery(
     [QUERY_KEYS.USER_PROFILE, directoryPath],
     getDirectoryContents,
