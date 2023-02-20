@@ -1,6 +1,7 @@
 import {
   Button,
   HStack,
+  Image,
   ModalBody,
   ModalFooter,
   Text,
@@ -95,7 +96,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
     <CenteredModal isOpen={isOpen} onClose={onClose} title="File Preview">
       <ModalBody>
         {isImageUrlSupported ? (
-          <></>
+          <Image src={content.image_url || ""} alt={content.name} />
         ) : (
           <>
             <Text textAlign={"center"} mb={"10"}>

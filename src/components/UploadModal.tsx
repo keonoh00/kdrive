@@ -118,10 +118,14 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
         toast(toastConfig);
       }
     },
-    onSuccess: (data) => {
+    onSuccess: ({ result }: any) => {
+      if (!result.id || !watch("file")[0].name) {
+        throw new Error("Invalid response from uploadImage");
+      }
+
       createImageDBMutation.mutate({
         name: watch("file")[0].name,
-        imageURL: `https://upload.imagedelivery.net/dsQgSfWIsnrqGQ0-Ts_CRw/${data.id}/public`,
+        imageURL: `https://imagedelivery.net/dsQgSfWIsnrqGQ0-Ts_CRw/${result.id}/public`,
       });
     },
   });
