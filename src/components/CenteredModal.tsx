@@ -1,5 +1,6 @@
 import {
   Modal,
+  ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
@@ -23,10 +24,13 @@ const CenteredModal: React.FC<CenteredModalProps> = ({
   return (
     <Modal onClose={onClose} isOpen={isOpen}>
       <ModalOverlay />
+
       <ModalContent>
-        <ModalHeader>{title}</ModalHeader>
-        <ModalCloseButton />
-        {children}
+        <ModalHeader>
+          <ModalCloseButton />
+          <ModalHeader>{title}</ModalHeader>
+        </ModalHeader>
+        <ModalBody>{children}</ModalBody>
       </ModalContent>
     </Modal>
   );
