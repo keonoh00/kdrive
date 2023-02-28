@@ -1,4 +1,4 @@
-import { Grid } from "@chakra-ui/react";
+import { Wrap } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDirectoryItems } from "../api/useDirectoryItems";
@@ -40,13 +40,7 @@ const Home = () => {
   }, []);
 
   return user ? (
-    <Grid
-      templateColumns="repeat(8, 3fr)"
-      columnGap={4}
-      rowGap={6}
-      px={20}
-      py={8}
-    >
+    <Wrap columnGap={6} rowGap={6} px={20} py={8}>
       {isLoading ? (
         <FolderSkeletonList />
       ) : (
@@ -59,7 +53,7 @@ const Home = () => {
           ))}
         </>
       )}
-    </Grid>
+    </Wrap>
   ) : (
     <NoUser />
   );

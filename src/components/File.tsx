@@ -1,8 +1,9 @@
-import { Grid, Heading, useDisclosure } from "@chakra-ui/react";
-import React, { FC } from "react";
+import { useDisclosure } from "@chakra-ui/react";
+import { FC } from "react";
 import { FaFile } from "react-icons/fa";
 import { IFile } from "../api/useDirectoryItems";
 import ItemButton from "./ItemButton";
+import { ItemLabel } from "./ItemLabel";
 import PreviewModal from "./PreviewModal";
 
 interface IFileProps {
@@ -16,16 +17,15 @@ const File: FC<IFileProps> = ({ item }) => {
     onClose: onClosePreviewModal,
   } = useDisclosure();
 
-  console.log(item);
   return (
     <>
       <ItemButton onClick={onOpenPreviewModal}>
         <FaFile size={64} />
-        <Grid templateColumns="repeat(1, 3fr)">
-          <Heading noOfLines={1} fontSize={"sm"} textAlign={"center"}>
-            {item.name}
-          </Heading>
-        </Grid>
+        <ItemLabel
+          name={item.name}
+          created_at={item.created_at}
+          created_by={item.created_by}
+        />
       </ItemButton>
       <PreviewModal
         isOpen={isOpenPreviewModal}

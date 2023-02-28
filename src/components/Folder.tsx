@@ -1,18 +1,19 @@
-import { Box, Grid, Heading, Skeleton, SkeletonText } from "@chakra-ui/react";
-import React, { FC } from "react";
+import { FC } from "react";
+import { Skeleton, SkeletonText } from "@chakra-ui/react";
 import { FaFolder } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
 import { IFile } from "../api/useDirectoryItems";
 import ItemButton from "./ItemButton";
+import { ItemLabel } from "./ItemLabel";
 
 const FOLDER_HEIGHT = 120;
 
 export const FolderSkeleton = () => {
   return (
-    <Box>
+    <ItemButton>
       <Skeleton rounded={"xl"} height={FOLDER_HEIGHT} mb={3} />
       <SkeletonText noOfLines={2} />
-    </Box>
+    </ItemButton>
   );
 };
 
@@ -31,11 +32,11 @@ const Folder: FC<IFolderProps> = ({ item }) => {
       }
     >
       <FaFolder size={64} />
-      <Grid templateColumns="repeat(1, 3fr)">
-        <Heading noOfLines={1} fontSize={"sm"} textAlign={"center"}>
-          {item.name.split("/")[1]}
-        </Heading>
-      </Grid>
+      <ItemLabel
+        name={item.name}
+        created_at={item.created_at}
+        created_by={item.created_by}
+      />
     </ItemButton>
   );
 };

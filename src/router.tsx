@@ -1,14 +1,14 @@
-import React from 'react';
-import { createBrowserRouter } from 'react-router-dom';
-import RootComponent from './components/Root';
-import Home from './routes/Home';
-import NotFound from './routes/NotFound';
-import Upload from './routes/Upload';
+import React from "react";
+import { createBrowserRouter } from "react-router-dom";
+import Root from "./components/Root";
+import Home from "./routes/Home";
+import NotFound from "./routes/NotFound";
+import Upload from "./routes/Upload";
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <RootComponent />,
+    path: "/",
+    element: <Root />,
     errorElement: <NotFound />,
     children: [
       { path: ``, element: <Home /> },
