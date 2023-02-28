@@ -126,6 +126,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
       createImageDBMutation.mutate({
         name: watch("file")[0].name,
         imageURL: `https://imagedelivery.net/dsQgSfWIsnrqGQ0-Ts_CRw/${result.id}/public`,
+        imageId: result.id,
       });
     },
   });

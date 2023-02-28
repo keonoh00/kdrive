@@ -15,6 +15,8 @@ const File: FC<IFileProps> = ({ item }) => {
     onOpen: onOpenPreviewModal,
     onClose: onClosePreviewModal,
   } = useDisclosure();
+
+  console.log(item);
   return (
     <>
       <ItemButton onClick={onOpenPreviewModal}>

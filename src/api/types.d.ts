@@ -20,6 +20,7 @@ export interface IUploadImageResponse {
 export interface ICreateImageRequest {
   name: string;
   imageURL: string;
+  imageId: string;
 }
 
 export interface ICreateImageResponse {

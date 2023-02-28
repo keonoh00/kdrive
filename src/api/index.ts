@@ -53,10 +53,14 @@ export const uploadImage = async ({ file, uploadURL }: IUploadImageRequest) => {
   return response.data;
 };
 
-export const createImage = async ({ name, imageURL }: ICreateImageRequest) => {
+export const createImage = async ({
+  name,
+  imageURL,
+  imageId,
+}: ICreateImageRequest) => {
   const response = await axisoInstance.post(
     `files/upload`,
-    { name, image_url: imageURL },
+    { name, image_url: imageURL, image_id: imageId },
     {
       headers: {
         "X-CSRFToken": Cookies.get("csrftoken") || "",

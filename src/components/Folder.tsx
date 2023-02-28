@@ -26,12 +26,14 @@ const Folder: FC<IFolderProps> = ({ item }) => {
 
   return (
     <ItemButton
-      onClick={() => setSearchParams({ path: item.path + item.name })}
+      onClick={() =>
+        setSearchParams({ path: item.path + item.name.split("/")[1] })
+      }
     >
       <FaFolder size={64} />
       <Grid templateColumns="repeat(1, 3fr)">
         <Heading noOfLines={1} fontSize={"sm"} textAlign={"center"}>
-          {item.name.split("/")[0]}
+          {item.name.split("/")[1]}
         </Heading>
       </Grid>
     </ItemButton>
