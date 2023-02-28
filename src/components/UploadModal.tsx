@@ -7,6 +7,7 @@ import {
   InputLeftElement,
   ModalBody,
   ModalFooter,
+  Text,
   ToastId,
   useToast,
   VStack,
@@ -25,6 +26,7 @@ import {
   IUploadImageRequest,
   IUploadImageResponse,
 } from "../api/types";
+import { IFile } from "../api/useDirectoryItems";
 import CenteredModal from "./CenteredModal";
 
 interface IUploadForm {
@@ -42,9 +44,11 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm<IUploadForm>();
   const toast = useToast();
   const toastId = React.useRef<ToastId>();
+  const [fileUploadResult, setFileUploadResult] = React.useState<IFile>();
 
   const createImageDBMutation = useMutation<
     ICreateImageResponse,
@@ -56,11 +60,10 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
         title: "Running image classification in server",
         status: "loading" as AlertStatus,
         description: "We are running image classification in server",
+        duration: 99999999999,
       };
       if (toastId.current) {
         toast.update(toastId.current, toastConfig);
-      } else {
-        toast(toastConfig);
       }
     },
     onError: (error) => {
@@ -71,21 +74,20 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
       };
       if (toastId.current) {
         toast.update(toastId.current, toastConfig);
-      } else {
-        toast(toastConfig);
       }
     },
-    onSuccess: () => {
+    onSuccess: (res) => {
       const toastConfig = {
         title: "Image classification success",
         status: "success" as AlertStatus,
         description: "Image classification success",
+        duration: 1000,
       };
       if (toastId.current) {
         toast.update(toastId.current, toastConfig);
-      } else {
-        toast(toastConfig);
       }
+      reset();
+      setFileUploadResult(res.data);
     },
   });
 
@@ -102,8 +104,6 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
       };
       if (toastId.current) {
         toast.update(toastId.current, toastConfig);
-      } else {
-        toast(toastConfig);
       }
     },
     onError: (error) => {
@@ -114,8 +114,6 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
       };
       if (toastId.current) {
         toast.update(toastId.current, toastConfig);
-      } else {
-        toast(toastConfig);
       }
     },
     onSuccess: ({ result }: any) => {
@@ -151,8 +149,6 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
       };
       if (toastId.current) {
         toast.update(toastId.current, toastConfig);
-      } else {
-        toast(toastConfig);
       }
     },
     onSuccess: (data) => {
@@ -187,7 +183,24 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
             />
           </InputGroup>
         </VStack>
+
+        {fileUploadResult ? (
+          <VStack alignItems={"flex-start"} mt={"4"}>
+            <Text fontWeight={"bold"}>
+              {fileUploadResult.name}
+              <Text color={"green.400"}>uploaded successfully</Text>
+            </Text>
+
+            <Text>
+              Classification:
+              <Text color={"green.400"}>
+                {fileUploadResult.path.split("/")[1]}
+              </Text>
+            </Text>
+          </VStack>
+        ) : null}
       </ModalBody>
+
       <ModalFooter>
         <Button
           onClick={handleSubmit(onUpload)}
