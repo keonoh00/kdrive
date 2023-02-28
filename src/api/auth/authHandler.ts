@@ -1,5 +1,5 @@
 import Cookie from "js-cookie";
-import { axisoInstance } from "..";
+import { axiosInstance } from "..";
 import { ILogInRequest, ISignUpRequest } from "./type";
 
 class AuthHandler {
@@ -14,9 +14,8 @@ class AuthHandler {
   }
 
   signUp = async ({ username, password, email, name }: ISignUpRequest) => {
-    console.log("signUp", username, password, email, name);
     try {
-      const response = await axisoInstance.post(
+      const response = await axiosInstance.post(
         "users/create-account",
         { username, password, email, name },
         {
@@ -32,9 +31,8 @@ class AuthHandler {
   };
 
   logIn = async ({ username, password }: ILogInRequest) => {
-    console.log("logIn", username, password);
     try {
-      const response = await axisoInstance.post(
+      const response = await axiosInstance.post(
         "users/login",
         { username, password },
         {
@@ -52,7 +50,7 @@ class AuthHandler {
 
   logOut = async () => {
     try {
-      const response = await axisoInstance.post("users/logout", null, {
+      const response = await axiosInstance.post("users/logout", null, {
         headers: {
           "X-CSRFToken": Cookie.get("csrftoken") || "",
         },

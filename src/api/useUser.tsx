@@ -1,9 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import { axisoInstance } from '.';
-import { QUERY_KEYS } from '../constants/api';
+import { useQuery } from "@tanstack/react-query";
+import { axiosInstance } from ".";
+import { QUERY_KEYS } from "../constants/api";
 
 const getUser = async (): Promise<IUser> => {
-  const response = await axisoInstance.get('users/me');
+  const response = await axiosInstance.get("users/me");
   return response.data;
 };
 
@@ -15,9 +15,13 @@ export interface IUser {
 }
 
 export const useUser = () => {
-  const { data, isError, isLoading } = useQuery([QUERY_KEYS.USER_PROFILE], getUser, {
-    retry: false
-  });
+  const { data, isError, isLoading } = useQuery(
+    [QUERY_KEYS.USER_PROFILE],
+    getUser,
+    {
+      retry: false,
+    }
+  );
 
   return { user: data, isLoggedIn: !isError, isLoadingUser: isLoading };
 };

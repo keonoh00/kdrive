@@ -3,9 +3,12 @@ import Cookies from "js-cookie";
 import { API_BASE_URL } from "../constants/api";
 import { ICreateImageRequest, IUploadImageRequest } from "./types";
 
-export const axisoInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
+  headers: {
+    "X-CSRFToken": Cookies.get("csrftoken") || "",
+  },
 });
 
 export const downloadFromUrl = async ({ url }: { url: string | null }) => {
@@ -22,7 +25,7 @@ export const deleteFile = async ({ id }: { id: number }) => {
   if (!id) {
     throw new Error("id is required");
   }
-  const response = await axisoInstance.delete(`files/${id}`, {
+  const response = await axiosInstance.delete(`files/${id}`, {
     headers: {
       "X-CSRFToken": Cookies.get("csrftoken") || "",
     },
@@ -32,7 +35,7 @@ export const deleteFile = async ({ id }: { id: number }) => {
 };
 
 export const getUploadURL = async () => {
-  const response = await axisoInstance.post(`files/generate-upload-url`, null, {
+  const response = await axiosInstance.post(`files/generate-upload-url`, null, {
     headers: {
       "X-CSRFToken": Cookies.get("csrftoken") || "",
     },
@@ -58,7 +61,7 @@ export const createImage = async ({
   imageURL,
   imageId,
 }: ICreateImageRequest) => {
-  const response = await axisoInstance.post(
+  const response = await axiosInstance.post(
     `files/upload`,
     { name, image_url: imageURL, image_id: imageId },
     {

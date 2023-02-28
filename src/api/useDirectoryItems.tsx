@@ -1,6 +1,6 @@
 import { QueryFunctionContext, useQuery } from "@tanstack/react-query";
 import Cookies from "js-cookie";
-import { axisoInstance } from ".";
+import { axiosInstance } from ".";
 import { QUERY_KEYS } from "../constants/api";
 import { IUser } from "./useUser";
 
@@ -10,7 +10,7 @@ const getDirectoryContents = async ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, path] = queryKey;
 
-  const response = await axisoInstance.post(
+  const response = await axiosInstance.post(
     `files/`,
     { path },
     {
