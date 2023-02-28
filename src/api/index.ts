@@ -6,9 +6,6 @@ import { ICreateImageRequest, IUploadImageRequest } from "./types";
 export const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
-  headers: {
-    "X-CSRFToken": Cookies.get("csrftoken") || "",
-  },
 });
 
 export const downloadFromUrl = async ({ url }: { url: string | null }) => {
