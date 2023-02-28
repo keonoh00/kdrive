@@ -15,6 +15,7 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { deleteFile, downloadFromUrl } from "../api";
 import { IFile, useDirectoryItems } from "../api/useDirectoryItems";
+import { getDisplayDate } from "../utils";
 import CenteredModal from "./CenteredModal";
 
 interface PreviewModalProps {
@@ -123,17 +124,18 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
     deleteMutation.mutate({ id: content.id });
   };
 
+  const displayDate = getDisplayDate(content.created_at);
+  const title = `${content.name} Preview`;
+
   return (
-    <CenteredModal isOpen={isOpen} onClose={onClose} title="File Preview">
+    <CenteredModal isOpen={isOpen} onClose={onClose} title={title}>
       <ModalBody>
         {isImageUrlSupported ? (
           <>
-            <Image src={content.image_url || ""} alt={content.name} />
-            <Text>File Name: {content.name}</Text>
-            <Text>File ID: {content.id}</Text>
-            <Text>File URL: {content.image_url || "Missing url"}</Text>
+            <Image src={content.image_url || ""} alt={title} />
+            <Text>File Name: {content.name}</Text>1
             <Text>File Created At: {content.created_at}</Text>
-            <Text>File Updated At: {content.updated_at}</Text>
+            <Text>File Updated At: {displayDate}</Text>
             <Text>File Updated At: {JSON.stringify(content.created_by)}</Text>
           </>
         ) : (
@@ -142,11 +144,8 @@ const PreviewModal: React.FC<PreviewModalProps> = ({
               This file is corrupted, please check and delete
             </Text>
             <Text>File Name: {content.name}</Text>
-            <Text>File ID: {content.id}</Text>
-            <Text>File URL: {content.image_url || "Missing url"}</Text>
-            <Text>File Created At: {content.created_at}</Text>
-            <Text>File Updated At: {content.updated_at}</Text>
-            <Text>File Updated At: {JSON.stringify(content.created_by)}</Text>
+            <Text>Created at {content.created_at}</Text>
+            <Text>Created by: {JSON.stringify(content.created_by)}</Text>
           </>
         )}
       </ModalBody>

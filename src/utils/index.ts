@@ -19,3 +19,7 @@ export const getErrorStringFromAxiosError = (error: AxiosError) => {
 
   return "Something went wrong";
 };
+
+export const getDisplayDate = (date: string | Date) => {
+  return new Date(date).toLocaleDateString();
+};
