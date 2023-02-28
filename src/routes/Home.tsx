@@ -4,19 +4,8 @@ import { useSearchParams } from "react-router-dom";
 import { useDirectoryItems } from "../api/useDirectoryItems";
 import { useUser } from "../api/useUser";
 import File from "../components/File";
-import Folder, { FolderSkeleton } from "../components/Folder";
+import Folder, { FolderSkeletonList } from "../components/Folder";
 import NoUser from "../components/NoUser";
-
-const FolderSkeletonList = () => {
-  const dummyArray = new Array(20).fill("");
-  return (
-    <>
-      {dummyArray.map((_, index) => (
-        <FolderSkeleton key={index} />
-      ))}
-    </>
-  );
-};
 
 const Home = () => {
   const [isLoadingDummy, setIsLoadingDummy] = React.useState(true);
@@ -34,10 +23,14 @@ const Home = () => {
   const isLoading = isLoadingUser || isLoadingDirectoryItems || isLoadingDummy;
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoadingDummy(false);
-    }, 1000);
-  }, []);
+    if (!isLoadingDirectoryItems) {
+      setTimeout(() => {
+        setIsLoadingDummy(false);
+      }, 1000);
+    } else {
+      setIsLoadingDummy(true);
+    }
+  }, [isLoadingDirectoryItems]);
 
   return user ? (
     <Wrap columnGap={6} rowGap={6} px={20} py={8}>
