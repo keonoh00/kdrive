@@ -47,6 +47,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       queryClient.refetchQueries([QUERY_KEYS.USER_PROFILE]);
       reset();
       onClose();
+      window.location.reload();
     },
     onError: (error) => {
       const errorTitle = getErrorStringFromAxiosError(error);
