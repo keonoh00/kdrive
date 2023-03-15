@@ -204,10 +204,6 @@ class ClassificationClass:
         )
 
         self.temp_dir = "tmp"
-        # Create temporary folder
-        self.cli.exec_command(f"mkdir {self.temp_dir}")
-        # Copy all source codes to temporary folder
-        self.cli.exec_command(f"cp -R kdrive/* {self.temp_dir}")
 
     def _download_image(self):
         self.cli.exec_command(

@@ -32,7 +32,7 @@ class CreateUser(APIView):
     def post(self, request):
         password = request.data.get("password")
         if not password:
-            raise ParseError
+            return Response("Password is required", status=status.HTTP_400_BAD_REQUEST)
         serializer = PrivateUserSerializer(data=request.data)
         if serializer.is_valid():
             new_user = serializer.save()
