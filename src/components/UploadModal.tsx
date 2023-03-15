@@ -17,6 +17,7 @@ import { AxiosError } from "axios";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { FaImage } from "react-icons/fa";
+import { useSearchParams } from "react-router-dom";
 import { createImage, getUploadURL, uploadImage } from "../api";
 import {
   ICreateImageRequest,
@@ -26,7 +27,7 @@ import {
   IUploadImageRequest,
   IUploadImageResponse,
 } from "../api/types";
-import { IFile } from "../api/useDirectoryItems";
+import { IFile, useDirectoryItems } from "../api/useDirectoryItems";
 import CenteredModal from "./CenteredModal";
 
 interface IUploadForm {
@@ -49,6 +50,17 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
   const toast = useToast();
   const toastId = React.useRef<ToastId>();
   const [fileUploadResult, setFileUploadResult] = React.useState<IFile>();
+
+  const onCloseModal = () => {
+    setFileUploadResult(undefined);
+    onClose();
+  };
+
+  // eslint-disable-next-line
+  const [searchParams, _] = useSearchParams();
+  const { refetch } = useDirectoryItems({
+    directoryPath: searchParams.get("path") || "/",
+  });
 
   const createImageDBMutation = useMutation<
     ICreateImageResponse,
@@ -88,6 +100,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
       }
       reset();
       setFileUploadResult(res.data);
+      refetch();
     },
   });
 
@@ -164,7 +177,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <CenteredModal isOpen={isOpen} onClose={onClose} title="Upload a file">
+    <CenteredModal isOpen={isOpen} onClose={onCloseModal} title="Upload a file">
       <ModalBody>
         <VStack as="form" onSubmit={handleSubmit(onUpload)}>
           <InputGroup>
